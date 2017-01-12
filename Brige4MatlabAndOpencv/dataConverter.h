@@ -25,5 +25,6 @@ namespace garrettWorkspace {
 		cv::Mat mx2cv(const mxArray * prhs, int cvType);
 
 	private:
+
 	};
 }

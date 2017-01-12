@@ -25,24 +25,28 @@ namespace mexFunctionCollector {
 		const size_t * getDims(const mxArray *pa);
 		const size_t getDimNums(const mxArray *pa);
 		cv::vector<int> calDims();
-		cv::vector<int> dims;
+		cv::vector<int> dims;				//结构：h、w、.....
 		mxArray * array;
 	};
 
 	//double
 	class BRIGE4MATLABANDOPENCV_API doubleArray : public numericArray {
 	public:
+		doubleArray();
 		doubleArray(size_t ndim, const size_t *dims, mxClassID classid, mxComplexity flag);
-		virtual cv::Mat tocv(int cvType) = 0;
-
+		virtual cv::Mat tocv(int cvType) = 0;			//有 =0 的是纯虚类，纯虚类不允许被实例化，但虚类可以
 	};
 
 	//实double
 	class BRIGE4MATLABANDOPENCV_API realDoubleArray : public doubleArray {
 	public:
 		realDoubleArray(size_t ndim, const size_t *dims, mxClassID classid, mxComplexity flag);
+		realDoubleArray(cv::Mat mat);
+
 		virtual cv::Mat tocv(int cvType);
 	private:
+		cv::Mat mx2cv(const mxArray * prhs, int cvType, cv::vector<int> dims);
+		mxArray * cv2mx(cv::Mat mat);
 		garrettWorkspace::numericConverter converter;
 	};
 }

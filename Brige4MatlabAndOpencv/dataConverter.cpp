@@ -7,7 +7,7 @@ garrettWorkspace::dataConverter::dataConverter()
 }
 cv::Mat numericConverter::mx2cv(const mxArray * prhs, int cvType)
 {
-	//assert(cvType == CV_32F | cvType == CV_8UC1);
+
 	int depth = CV_MAT_DEPTH(cvType);	//深度，也就是类型
 	int channel = CV_MAT_CN(cvType);	//通道数
 	assert(channel == 1);
@@ -22,7 +22,7 @@ cv::Mat numericConverter::mx2cv(const mxArray * prhs, int cvType)
 		for (int i = 0; i < height; i++)
 		{
 			for (int k = 0; k < width; k++) {
-				out.at<uchar>(i, k) = samples[k * height + i];
+				out.at<Vec<unsigned char, 1>>(i, k) =  samples[k * height + i] ;
 			}
 		}
 		break;
@@ -119,11 +119,11 @@ mxArray * cv2mx(Mat imgSrc) {
 		pMat = mxCreateNumericArray(c, dims, mxDOUBLE_CLASS, mxREAL);
 		
 		input = (double *)mxGetData(pMat);
-		for (int i = 0; i < h; i++)
+		for (int i = 0; i < h; i++)			//i为行
 		{
-			for (int j = 0; j < w; j++)
+			for (int j = 0; j < w; j++)		//j为列
 			{
-				for (int ch = 0; ch < c; ch++)
+				for (int ch = 0; ch < c; ch++)	//ch为第三维，也就是说mxArray顺序为先执行行，然后再执行列，最后执行第三维，如果还有第四维，这时候再到第四维
 				{
 					input[j*h + i + ch*h*w] = imgSrc.row(i).col(j).data[c - 1 - ch];
 				}

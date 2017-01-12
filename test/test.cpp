@@ -9,31 +9,15 @@ using namespace cv;
 using namespace mexFunctionCollector;
 int main()
 {
-	mwSize dims[4] = { 10, 10, 3, 13 };
+	mwSize dims[3] = { 10, 10, 3};
 
-	//多态
-	numericArray * array =& realDoubleArray(4, dims,  mxDOUBLE_CLASS, mxREAL);
-	array->tocv(CV_16S);
+	//多态,不知道为什么，当这里使用多态性来赋值的话会出现array->dims这一项无法初始化！！
+	realDoubleArray  array = realDoubleArray(3, dims,  mxDOUBLE_CLASS, mxREAL);
+	cv::Mat out = array.tocv(CV_64FC3);
+	realDoubleArray array2 = realDoubleArray(out);
 
-	/*
-	mxArray *test = mxCreateNumericArray(4, dims, mxDOUBLE_CLASS, mxREAL);
-	const size_t * dim = mxGetDimensions(test);
-	const size_t num = mxGetNumberOfDimensions(test);
-	double *testPtr = mxGetPr(test);
-	
+	int tesst = out.col(2).row(5).data[0];
 
-	for (int i = 0; i < 1; i++) {
-		testPtr[i] = 0;
-	}
-	garrettWorkspace::dataConverter dc;
-	dc.mx2cv(test, 0);
-	dc.mx2cv(test, 1);
-	dc.mx2cv(test, 2);
-
-	dc.mx2cv(test, 3);
-	dc.mx2cv(test, 4);
-	dc.mx2cv(test, 5);
-	dc.mx2cv(test, 6);*/
     return 3;
 }
 
