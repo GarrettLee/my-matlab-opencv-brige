@@ -34,6 +34,6 @@ int main()
 	dc.mx2cv(test, 4);
 	dc.mx2cv(test, 5);
 	dc.mx2cv(test, 6);*/
-    return 0;
+    return 1;
 }
 
