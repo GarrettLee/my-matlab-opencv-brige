@@ -5,6 +5,13 @@ mexFunctionCollector::numericArray::numericArray()
 {
 }
 
+mexFunctionCollector::numericArray::numericArray(mxArray * array)
+{
+	//TODO 检查是否为数组数列
+	this->array = array;
+	this->dims = this->calDims();
+}
+
 mexFunctionCollector::numericArray::numericArray(size_t ndim, const size_t * idims, mxClassID classid, mxComplexity flag)
 {
 	this->array = createNumericArray( ndim, idims,  classid,  flag);
@@ -15,6 +22,14 @@ mexFunctionCollector::numericArray::numericArray(size_t ndim, const size_t * idi
 cv::vector<int> mexFunctionCollector::numericArray::getDims()
 {
 	return this->dims;
+}
+
+mexFunctionCollector::realDoubleArray::realDoubleArray(mxArray * array)
+{
+	assert(mxIsDouble(array));
+	assert(!mxIsComplex(array));
+	this->array = array;
+	this->dims = this->calDims();
 }
 
 mexFunctionCollector::realDoubleArray::realDoubleArray(size_t ndim, const size_t * dims, mxClassID classid, mxComplexity flag) : doubleArray( ndim,   dims,  classid,  flag)
@@ -37,11 +52,14 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 {
 	int dimnums = dims.size();
 	assert(dimnums <= 3);
-	
-	const int channels = dims[2];
+
+	const int channels = dimnums < 3 ? 1 : dims[2];
 	int depth = CV_MAT_DEPTH(cvType);	//深度，也就是类型
 	int cn = CV_MAT_CN(cvType);	//通道数
-	assert(cn == channels);
+	if (cn != channels) {
+		cvType = CV_MAKETYPE(depth, channels);
+	}
+	int size = CV_ELEM_SIZE(cvType);
 	double *samples;
 	samples = mxGetPr(prhs);
 	int width = dims[1];
@@ -55,7 +73,8 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 		{
 			for (int k = 0; k < width; k++) {
 				for (int c = 0; c < channels; c++) {
-					out.row(i).col(k).data[c] = samples[k * height + i];
+					unsigned char *ptr = out.row(i).col(k).data + c *  size / channels;
+					*ptr = samples[k * height + i];
 				}
 			}
 		}
@@ -66,7 +85,8 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 		{
 			for (int k = 0; k < width; k++) {
 				for (int c = 0; c < channels; c++) {
-					out.row(i).col(k).data[c] = samples[k * height + i];
+					char *ptr = (char *)(out.row(i).col(k).data + c *  size / channels);
+					*ptr = samples[k * height + i];
 				}
 			}
 		}
@@ -77,7 +97,8 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 		{
 			for (int k = 0; k < width; k++) {
 				for (int c = 0; c < channels; c++) {
-					out.row(i).col(k).data[c] = samples[k * height + i];
+					unsigned short *ptr = (unsigned short  *)(out.row(i).col(k).data + c *  size / channels);
+					*ptr = samples[k * height + i];
 				}
 			}
 		}
@@ -88,7 +109,8 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 		{
 			for (int k = 0; k < width; k++) {
 				for (int c = 0; c < channels; c++) {
-					out.row(i).col(k).data[c] = samples[k * height + i];
+					short *ptr = (short  *)(out.row(i).col(k).data + c *  size / channels);
+					*ptr = samples[k * height + i];
 				}
 			}
 		}
@@ -99,7 +121,8 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 		{
 			for (int k = 0; k < width; k++) {
 				for (int c = 0; c < channels; c++) {
-					out.row(i).col(k).data[c] = samples[k * height + i];
+					int *ptr = (int  *)(out.row(i).col(k).data + c *  size / channels);
+					*ptr = samples[k * height + i];
 				}
 			}
 		}
@@ -110,7 +133,8 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 		{
 			for (int k = 0; k < width; k++) {
 				for (int c = 0; c < channels; c++) {
-					out.row(i).col(k).data[c] = samples[k * height + i];
+					float *ptr = (float  *)(out.row(i).col(k).data + c *  size / channels);
+					*ptr = samples[k * height + i];
 				}
 			}
 		}
@@ -121,7 +145,8 @@ cv::Mat mexFunctionCollector::realDoubleArray::mx2cv(const mxArray * prhs, int c
 		{
 			for (int k = 0; k < width; k++) {
 				for (int c = 0; c < channels; c++) {
-					out.row(i).col(k).data[c] = samples[k * height + i];
+					double *ptr = (double  *)(out.row(i).col(k).data + c *  size / channels);
+					*ptr = samples[k * height + i];
 				}
 			}
 		}
@@ -185,6 +210,18 @@ mexFunctionCollector::doubleArray::doubleArray()
 {
 }
 
+mexFunctionCollector::doubleArray::doubleArray(mxArray * array)
+{
+	assert(mxIsDouble(array));
+	this->array = array;
+	this->dims = this->calDims();
+}
+
 mexFunctionCollector::doubleArray::doubleArray(size_t ndim, const size_t * dims, mxClassID classid, mxComplexity flag):numericArray( ndim,  dims,  classid,  flag)
 {
+}
+
+mxArray * mexFunctionCollector::doubleArray::getMxArray()
+{
+	return this->array;
 }

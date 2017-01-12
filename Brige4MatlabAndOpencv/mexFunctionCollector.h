@@ -16,6 +16,7 @@ namespace mexFunctionCollector {
 	class BRIGE4MATLABANDOPENCV_API numericArray {	
 	public:
 		numericArray();
+		numericArray(mxArray * array);
 		numericArray(size_t ndim, const size_t *dims, mxClassID classid, mxComplexity flag);
 		cv::vector<int> getDims();
 		virtual cv::Mat tocv(int cvType) = 0;
@@ -32,16 +33,19 @@ namespace mexFunctionCollector {
 	class BRIGE4MATLABANDOPENCV_API doubleArray : public numericArray {
 	public:
 		doubleArray();
+		doubleArray(mxArray * array);
 		doubleArray(size_t ndim, const size_t *dims, mxClassID classid, mxComplexity flag);
 		virtual cv::Mat tocv(int cvType) = 0;			//有 =0 的是纯虚类，纯虚类不允许被实例化，但虚类可以
+		mxArray * getMxArray();
 	};
 
 	//实double
 	class BRIGE4MATLABANDOPENCV_API realDoubleArray : public doubleArray {
 	public:
+		realDoubleArray(mxArray * array);
 		realDoubleArray(size_t ndim, const size_t *dims, mxClassID classid, mxComplexity flag);
 		realDoubleArray(cv::Mat mat);
-
+		
 		virtual cv::Mat tocv(int cvType);
 	private:
 		cv::Mat mx2cv(const mxArray * prhs, int cvType, cv::vector<int> dims);
