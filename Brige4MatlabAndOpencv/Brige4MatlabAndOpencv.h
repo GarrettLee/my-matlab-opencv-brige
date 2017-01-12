@@ -9,7 +9,6 @@
 #else
 #define BRIGE4MATLABANDOPENCV_API __declspec(dllimport)
 #endif
-#include "dataConverter.h"
 #include "mexFunctionCollector.h"
 // 此类是从 Brige4MatlabAndOpencv.dll 导出的
 class BRIGE4MATLABANDOPENCV_API CBrige4MatlabAndOpencv {

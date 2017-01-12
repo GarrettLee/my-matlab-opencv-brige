@@ -10,7 +10,6 @@
 
 #include "opencv2/opencv.hpp"
 #include "mex.h"
-#include "dataConverter.h"
 
 namespace mexFunctionCollector {		
 	//可能为复数！！！
@@ -47,6 +46,5 @@ namespace mexFunctionCollector {
 	private:
 		cv::Mat mx2cv(const mxArray * prhs, int cvType, cv::vector<int> dims);
 		mxArray * cv2mx(cv::Mat mat);
-		garrettWorkspace::numericConverter converter;
 	};
 }
