@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="dataConverter">
+      <UniqueIdentifier>{47d6d97d-ca7e-4b80-9f19-9cfc015887f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mex">
+      <UniqueIdentifier>{905cd09f-44b2-41e0-90f7-5e0537aaef73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,6 +33,12 @@
     <ClInclude Include="Brige4MatlabAndOpencv.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="dataConverter.h">
+      <Filter>dataConverter</Filter>
+    </ClInclude>
+    <ClInclude Include="mexFunctionCollector.h">
+      <Filter>mex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -37,6 +49,12 @@
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dataConverter.cpp">
+      <Filter>dataConverter</Filter>
+    </ClCompile>
+    <ClCompile Include="mexFunctionCollector.cpp">
+      <Filter>mex</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
